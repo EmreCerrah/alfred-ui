@@ -5,18 +5,22 @@ import { cn } from "@/lib/utils";
 import { type ButtonHTMLAttributes, forwardRef } from "react";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
+        // Default: gunmetal panel button with amber focus ring
         default:
-          "bg-zinc-700 text-zinc-100 hover:bg-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-600",
+          "bg-[var(--color-panel-alt)] text-[var(--color-steel)] hover:bg-[var(--color-border)] focus-visible:ring-2 focus-visible:ring-[var(--color-amber)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-panel)]",
+        // Ghost: transparent, subtle hover
         ghost:
-          "bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 dark:hover:bg-zinc-800",
+          "bg-transparent text-[var(--color-muted)] hover:bg-[var(--color-panel-alt)] hover:text-[var(--color-steel)] focus-visible:ring-2 focus-visible:ring-[var(--color-amber)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-panel)]",
+        // Accent: amber send button (dark text on amber bg)
         accent:
-          "bg-amber-700 text-amber-50 hover:bg-amber-600 dark:bg-amber-700 dark:text-amber-50 dark:hover:bg-amber-600",
+          "bg-[var(--color-amber)] text-[var(--color-amber-fg)] hover:bg-[var(--color-amber-dim)] focus-visible:ring-2 focus-visible:ring-[var(--color-amber)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-cave)]",
+        // Danger: red-outline stop button — clearly distinguishable
         danger:
-          "bg-red-800 text-red-50 hover:bg-red-700 dark:bg-red-800 dark:text-red-50 dark:hover:bg-red-700",
+          "bg-transparent text-[#f87171] border border-[#c0392b] hover:bg-[rgba(192,57,43,0.15)] focus-visible:ring-2 focus-visible:ring-[#c0392b] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-panel)]",
       },
       size: {
         sm: "h-8 px-3 text-xs",

@@ -133,7 +133,12 @@ function renderSpans(spans: Span[]): ReactNode[] {
       return (
         <code
           key={idx}
-          className="rounded bg-zinc-700 px-1 py-0.5 font-mono text-[0.85em] text-amber-300"
+          className="rounded px-1 py-0.5 font-mono text-[0.85em]"
+          style={{
+            background: "rgba(245,179,1,0.1)",
+            color: "var(--color-amber)",
+            border: "1px solid rgba(245,179,1,0.2)",
+          }}
         >
           {span.text}
         </code>
@@ -141,7 +146,7 @@ function renderSpans(spans: Span[]): ReactNode[] {
     }
     if (span.kind === "bold") {
       return (
-        <strong key={idx} className="font-semibold text-zinc-100">
+        <strong key={idx} style={{ fontWeight: 600, color: "var(--color-steel)" }}>
           {span.text}
         </strong>
       );
@@ -157,9 +162,18 @@ function MarkdownContent({ content }: { content: string }) {
       {blocks.map((block, idx) => {
         if (block.kind === "code") {
           return (
+            // Terminal-style code block: black bg, mono font, amber left border
             <pre
               key={idx}
-              className="overflow-x-auto rounded-md bg-zinc-900 p-3 font-mono text-xs text-zinc-200 border border-zinc-700"
+              className="overflow-x-auto rounded-md p-3 font-mono text-xs"
+              style={{
+                background: "#030405",
+                color: "var(--color-steel)",
+                borderLeft: "3px solid var(--color-amber)",
+                border: "1px solid var(--color-border)",
+                borderLeftWidth: "3px",
+                borderLeftColor: "var(--color-amber)",
+              }}
             >
               <code>{block.text}</code>
             </pre>
@@ -169,7 +183,11 @@ function MarkdownContent({ content }: { content: string }) {
           return (
             <blockquote
               key={idx}
-              className="border-l-2 border-amber-600 pl-3 text-zinc-400 italic"
+              className="pl-3 italic"
+              style={{
+                borderLeft: "2px solid var(--color-amber-dim)",
+                color: "var(--color-muted)",
+              }}
             >
               {renderSpans(block.spans)}
             </blockquote>
@@ -221,7 +239,14 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   if (isSystem) {
     return (
       <div className="flex justify-center">
-        <span className="rounded-full bg-zinc-800 px-3 py-1 text-xs text-zinc-500">
+        <span
+          className="rounded-full px-3 py-1 text-xs"
+          style={{
+            background: "var(--color-panel-alt)",
+            color: "var(--color-muted)",
+            border: "1px solid var(--color-border-dim)",
+          }}
+        >
           {message.content}
         </span>
       </div>
@@ -235,15 +260,45 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         isUser ? "ml-auto items-end" : "mr-auto items-start"
       )}
     >
+      {/* Role label — HUD style */}
+      <span
+        className="hud-label px-1"
+        style={{ color: isUser ? "var(--color-amber-dim)" : "var(--color-muted)" }}
+      >
+        {isUser ? "SIZ" : "ALFRED"}
+      </span>
+
+      {/* Bubble */}
       <div
         className={cn(
-          "rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
-          isUser
-            ? "bg-amber-800 text-amber-50 rounded-br-sm"
-            : "bg-zinc-800 text-zinc-200 rounded-bl-sm border border-zinc-700",
-          isError && "border-red-800 bg-red-950 text-red-300",
+          "px-4 py-2.5 text-sm leading-relaxed",
+          isUser ? "rounded-2xl rounded-br-sm" : "rounded-2xl rounded-bl-sm",
           isAborted && "opacity-75"
         )}
+        style={
+          isError
+            ? {
+                background: "rgba(192,57,43,0.15)",
+                border: "1px solid rgba(192,57,43,0.4)",
+                color: "#f87171",
+              }
+            : isUser
+            ? {
+                // User: slightly lighter graphite panel
+                background: "var(--color-panel-alt)",
+                border: "1px solid var(--color-border)",
+                color: "var(--color-steel)",
+              }
+            : {
+                // Assistant: dark metal panel with amber left border
+                background: "var(--color-panel)",
+                borderTop: "1px solid var(--color-border)",
+                borderRight: "1px solid var(--color-border)",
+                borderBottom: "1px solid var(--color-border)",
+                borderLeft: "3px solid var(--color-amber)",
+                color: "var(--color-steel)",
+              }
+        }
       >
         {isUser ? (
           <p className="whitespace-pre-wrap">{message.content}</p>
@@ -254,19 +309,29 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         )}
         {isStreaming && message.content !== "" && (
           <span
-            className="ml-0.5 inline-block h-3.5 w-0.5 animate-pulse bg-zinc-400 align-middle"
+            className="ml-0.5 inline-block h-3.5 w-0.5 align-middle animate-pulse"
+            style={{ background: "var(--color-amber)" }}
             aria-hidden="true"
           />
         )}
         {isAborted && (
-          <p className="mt-1 text-xs text-zinc-500 italic">— yanıt durduruldu</p>
+          <p
+            className="mt-1 text-xs italic"
+            style={{ color: "var(--color-muted)" }}
+          >
+            — yanıt durduruldu
+          </p>
         )}
         {isError && (
-          <p className="mt-1 text-xs text-red-400 italic">Bir hata oluştu.</p>
+          <p className="mt-1 text-xs italic" style={{ color: "#f87171" }}>
+            Bir hata oluştu.
+          </p>
         )}
       </div>
+
       <time
-        className="text-[10px] text-zinc-600 px-1"
+        className="text-[10px] px-1"
+        style={{ color: "var(--color-dim)" }}
         dateTime={new Date(message.createdAt).toISOString()}
       >
         {isClient ? formatTime(message.createdAt) : "\u00a0"}

@@ -7,26 +7,33 @@ interface StatusIndicatorProps {
 }
 
 const STATUS_LABELS: Record<ConnectionStatus, string> = {
-  mock: "Mock modu",
-  connected: "Bağlı",
-  disconnected: "Bağlantı yok",
-  error: "Hata",
+  mock: "MOCK MODE",
+  connected: "ONLINE",
+  disconnected: "OFFLINE",
+  error: "ERROR",
 };
 
 export function StatusIndicator({ status }: StatusIndicatorProps) {
+  const isMock = status === "mock";
+  const isConnected = status === "connected";
+
   return (
-    <Badge variant={status === "mock" ? "mock" : status === "connected" ? "success" : "warning"}>
+    <Badge variant={isMock ? "mock" : isConnected ? "success" : "warning"}>
+      {/* Status dot — amber pulse for mock, green for connected, muted otherwise */}
       <span
-        className={`h-1.5 w-1.5 rounded-full ${
-          status === "mock"
-            ? "bg-zinc-500"
-            : status === "connected"
-            ? "bg-emerald-400"
-            : "bg-amber-400"
-        }`}
+        className={isMock ? "h-2 w-2 rounded-full flex-shrink-0 status-dot-pulse" : "h-2 w-2 rounded-full flex-shrink-0"}
+        style={{
+          background: isMock
+            ? "var(--color-amber)"
+            : isConnected
+            ? "#4ade80"
+            : "var(--color-muted)",
+        }}
         aria-hidden="true"
       />
-      <span>{STATUS_LABELS[status]}</span>
+      <span className="hud-label" style={{ color: "inherit" }}>
+        {STATUS_LABELS[status]}
+      </span>
     </Badge>
   );
 }

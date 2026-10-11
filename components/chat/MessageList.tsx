@@ -17,18 +17,37 @@ export function MessageList({ messages }: MessageListProps) {
 
   if (messages.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-2 text-zinc-600 select-none">
-        <span className="text-4xl" role="img" aria-label="Alfred">
+      <div
+        className="flex flex-1 flex-col items-center justify-center gap-3 select-none"
+        style={{ color: "var(--color-dim)" }}
+      >
+        {/* Stylised top-hat icon using pure text/mono — no image */}
+        <span
+          className="font-mono text-4xl"
+          role="img"
+          aria-label="Alfred"
+          style={{ color: "var(--color-muted)" }}
+        >
           🎩
         </span>
-        <p className="text-sm">Bir mesaj yazarak başlayın.</p>
+        <div className="flex flex-col items-center gap-1">
+          <p
+            className="hud-label"
+            style={{ color: "var(--color-muted)", letterSpacing: "0.18em" }}
+          >
+            KOMUTA HAZIR
+          </p>
+          <p className="text-sm" style={{ color: "var(--color-dim)" }}>
+            Bir mesaj yazarak başlayın.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div
-      className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4"
+      className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 relative z-10"
       role="log"
       aria-label="Sohbet mesajları"
       aria-live="polite"

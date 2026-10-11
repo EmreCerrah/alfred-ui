@@ -66,6 +66,46 @@ OPENCLAW_GATEWAY_TOKEN=<your-token>
 
 **These variables must never use a `NEXT_PUBLIC_` prefix.** They are consumed server-side only.
 
+## Theme
+
+Alfred uses an original **underground command center** visual theme — a cave headquarters aesthetic built entirely from CSS (no external images, no third-party artwork, no trademarked symbols or logos).
+
+### Design direction
+
+| Element | Treatment |
+|---|---|
+| Background | Near-black cave stone via layered radial/linear gradients (`#050607` deep, with vignette) |
+| Surfaces | Gunmetal/graphite panels (`#14181c` primary, `#1b2026` secondary) with subtle inner borders |
+| Text | Cool steel (`#c9d1d9`) for body, muted graphite (`#7d8590`) for labels/timestamps |
+| Accent | Single warm amber/signal-yellow (`#f5b301`) — focus rings, send button, active sidebar item, status dot, blockquote borders |
+| Monitor detail | Faint cyan (`rgba(56,189,248,0.07)`) for subtle glow-from-screen effects |
+| Typography | Headings and HUD labels use Geist Mono (uppercase, tracked); body uses Geist Sans |
+| Texture | Subtle scanline overlay on the main chat area; vignette on the page background |
+| Motion | Single slow amber pulse on the status dot; respects `prefers-reduced-motion` |
+
+### Tokens (defined in `app/globals.css`)
+
+| CSS variable | Value | Role |
+|---|---|---|
+| `--color-cave` | `#050607` | Page background |
+| `--color-panel` | `#14181c` | Primary surface (header, sidebar, composer) |
+| `--color-panel-alt` | `#1b2026` | Secondary surface (user bubbles, hover) |
+| `--color-border` | `#252c35` | Panel borders |
+| `--color-border-dim` | `#1c2229` | Subtle inner borders |
+| `--color-steel` | `#c9d1d9` | Primary text |
+| `--color-muted` | `#7d8590` | Secondary text |
+| `--color-dim` | `#4a5360` | Tertiary / disabled text |
+| `--color-amber` | `#f5b301` | Accent (all active/focus states) |
+| `--color-amber-dim` | `#c28e00` | Accent hover/pressed |
+| `--color-amber-glow` | `rgba(245,179,1,0.12)` | Soft ambient glow behind active items |
+| `--color-amber-fg` | `#0d0f0b` | Text on amber backgrounds |
+| `--color-monitor` | `rgba(56,189,248,0.07)` | Optional monitor-glow cyan detail |
+| `--color-danger` | `#c0392b` | Stop button / error state |
+
+### Color mode
+
+The theme is **dark-only**. `color-scheme: dark` is set globally on `<html>` and there is no light-mode override. All contrast ratios meet WCAG AA against their respective backgrounds.
+
 ## Status
 
 **Phase 2 — Mock UI only.** No real network connection. The `MockTransport` simulates streaming replies from canned responses. Phase 3 will add the server-side WebSocket bridge to the OpenClaw Gateway.

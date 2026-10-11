@@ -11,7 +11,13 @@ interface HeaderProps {
 
 export function Header({ onMenuClick, connectionStatus }: HeaderProps) {
   return (
-    <header className="flex h-14 items-center justify-between border-b border-zinc-800 bg-zinc-950 px-3 sm:px-4">
+    <header
+      className="flex h-14 items-center justify-between px-3 sm:px-4"
+      style={{
+        background: "var(--color-panel)",
+        borderBottom: "1px solid var(--color-border)",
+      }}
+    >
       <div className="flex items-center gap-3">
         {/* Mobile menu button */}
         <Button
@@ -24,11 +30,28 @@ export function Header({ onMenuClick, connectionStatus }: HeaderProps) {
           <Menu className="h-5 w-5" aria-hidden="true" />
         </Button>
 
-        {/* Logo / name */}
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold tracking-tight text-zinc-100">
-            Alfred
-          </span>
+        {/* Wordmark — ALFRED in HUD/mono uppercase with amber accent line */}
+        <div className="flex flex-col leading-none gap-0.5">
+          <div className="flex flex-col gap-px">
+            <span
+              className="font-mono font-bold tracking-widest uppercase"
+              style={{ fontSize: "1rem", color: "var(--color-steel)" }}
+            >
+              ALFRED
+            </span>
+            {/* Thin amber accent underline */}
+            <span
+              aria-hidden="true"
+              style={{
+                display: "block",
+                height: "2px",
+                width: "100%",
+                background: "var(--color-amber)",
+                borderRadius: "1px",
+              }}
+            />
+          </div>
+          <span className="hud-label">Kişisel Asistan</span>
         </div>
       </div>
 

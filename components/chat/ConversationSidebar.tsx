@@ -1,5 +1,6 @@
 "use client";
 
+import { type CSSProperties } from "react";
 import { type Conversation } from "@/types/chat";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -44,10 +45,11 @@ function SidebarContent({
   return (
     <div className="flex h-full flex-col gap-1">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 pb-2 pt-3">
-        <span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
-          Sohbetler
-        </span>
+      <div
+        className="flex items-center justify-between px-3 pb-2 pt-3"
+        style={{ borderBottom: "1px solid var(--color-border-dim)" }}
+      >
+        <span className="hud-label">SOHBETLER</span>
         <Button
           variant="ghost"
           size="icon-sm"
@@ -62,34 +64,71 @@ function SidebarContent({
       {/* List */}
       <nav
         aria-label="Sohbet geçmişi"
-        className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 pb-4"
+        className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 pb-4 pt-1"
       >
-        {conversations.map((conv) => (
-          <button
-            key={conv.id}
-            onClick={() => onSelect(conv.id)}
-            className={cn(
-              "group flex w-full flex-col gap-0.5 rounded-lg px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400",
-              activeId === conv.id
-                ? "bg-zinc-700 text-zinc-100"
-                : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-            )}
-            aria-current={activeId === conv.id ? "page" : undefined}
-          >
-            <span className="truncate font-medium leading-tight">
-              {conv.title}
-            </span>
-            <span className="text-[10px] text-zinc-600 group-hover:text-zinc-500">
-              {now !== null
-                ? formatRelativeDate(conv.updatedAt, now)
-                : absoluteDate(conv.updatedAt)}
-            </span>
-          </button>
-        ))}
+        {conversations.map((conv) => {
+          const isActive = activeId === conv.id;
+          return (
+            <button
+              key={conv.id}
+              onClick={() => onSelect(conv.id)}
+              className={cn(
+                "group relative flex w-full flex-col gap-0.5 rounded-md px-3 py-2 text-left text-sm transition-colors focus-visible:outline-none",
+                isActive
+                  ? "text-steel"
+                  : "hover:text-steel"
+              )}
+              style={
+                isActive
+                  ? {
+                      background: "var(--color-panel-alt)",
+                      borderLeft: "3px solid var(--color-amber)",
+                      boxShadow: "inset 0 0 12px 0 var(--color-amber-glow)",
+                      color: "var(--color-steel)",
+                      paddingLeft: "calc(0.75rem - 3px)", // compensate for border
+                      outline: "none",
+                    }
+                  : {
+                      borderLeft: "3px solid transparent",
+                      color: "var(--color-muted)",
+                    }
+              }
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = "0 0 0 2px var(--color-amber)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = isActive
+                  ? "inset 0 0 12px 0 var(--color-amber-glow)"
+                  : "";
+              }}
+              aria-current={isActive ? "page" : undefined}
+            >
+              <span
+                className="truncate font-medium leading-tight"
+                style={{ fontFamily: "var(--font-geist-sans)" }}
+              >
+                {conv.title}
+              </span>
+              <span
+                className="text-[10px]"
+                style={{ color: "var(--color-dim)" }}
+              >
+                {now !== null
+                  ? formatRelativeDate(conv.updatedAt, now)
+                  : absoluteDate(conv.updatedAt)}
+              </span>
+            </button>
+          );
+        })}
       </nav>
     </div>
   );
 }
+
+const SIDEBAR_STYLE: CSSProperties = {
+  background: "var(--color-panel)",
+  borderRight: "1px solid var(--color-border)",
+};
 
 export function ConversationSidebar({
   conversations,
@@ -108,7 +147,8 @@ export function ConversationSidebar({
     <>
       {/* Desktop sidebar */}
       <aside
-        className="hidden md:flex md:w-64 md:flex-shrink-0 md:flex-col border-r border-zinc-800 bg-zinc-950"
+        className="hidden md:flex md:w-64 md:flex-shrink-0 md:flex-col"
+        style={SIDEBAR_STYLE}
         aria-label="Sohbet paneli"
       >
         <SidebarContent
@@ -122,7 +162,7 @@ export function ConversationSidebar({
       {/* Mobile drawer backdrop */}
       {open && (
         <div
-          className="fixed inset-0 z-30 bg-black/60 md:hidden"
+          className="fixed inset-0 z-30 bg-black/70 md:hidden"
           aria-hidden="true"
           onClick={onClose}
         />
@@ -131,9 +171,10 @@ export function ConversationSidebar({
       {/* Mobile drawer panel */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-72 flex-col border-r border-zinc-800 bg-zinc-950 transition-transform duration-200 md:hidden",
+          "fixed inset-y-0 left-0 z-40 w-72 flex-col transition-transform duration-200 md:hidden",
           open ? "flex translate-x-0" : "-translate-x-full"
         )}
+        style={SIDEBAR_STYLE}
         aria-label="Sohbet paneli"
         aria-hidden={!open}
       >

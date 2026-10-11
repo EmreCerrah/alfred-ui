@@ -22,13 +22,16 @@ export function ChatShell() {
   } = useChat();
 
   return (
-    <div className="flex h-screen flex-col bg-zinc-950 text-zinc-200 overflow-hidden">
+    <div
+      className="flex h-screen flex-col overflow-hidden"
+      style={{ background: "var(--color-cave)", color: "var(--color-steel)" }}
+    >
       <Header
         onMenuClick={() => setSidebarOpen((prev) => !prev)}
         connectionStatus="mock"
       />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative z-10">
         <ConversationSidebar
           conversations={conversations}
           activeId={activeConversationId}
@@ -39,7 +42,7 @@ export function ChatShell() {
         />
 
         <main
-          className="flex flex-1 flex-col overflow-hidden"
+          className="flex flex-1 flex-col overflow-hidden cave-scanlines"
           aria-label="Sohbet alanı"
         >
           <MessageList messages={activeConversation?.messages ?? []} />

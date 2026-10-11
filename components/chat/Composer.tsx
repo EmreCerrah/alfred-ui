@@ -54,7 +54,13 @@ export function Composer({ onSend, onStop, isStreaming, disabled }: ComposerProp
   const canSend = value.trim().length > 0 && !isStreaming && !disabled;
 
   return (
-    <div className="border-t border-zinc-800 bg-zinc-950 px-3 py-3 sm:px-4">
+    <div
+      className="px-3 py-3 sm:px-4 relative z-10"
+      style={{
+        background: "var(--color-panel)",
+        borderTop: "1px solid var(--color-border)",
+      }}
+    >
       <div className="mx-auto flex max-w-3xl items-end gap-2">
         <Textarea
           ref={textareaRef}
@@ -92,8 +98,15 @@ export function Composer({ onSend, onStop, isStreaming, disabled }: ComposerProp
           </Button>
         )}
       </div>
-      <p className="mx-auto mt-1.5 max-w-3xl text-center text-[10px] text-zinc-600">
-        Alfred şu an <strong className="text-zinc-500">Mock modunda</strong> çalışıyor — gerçek sunucu bağlantısı yok.
+      <p
+        className="mx-auto mt-1.5 max-w-3xl text-center hud-label"
+        style={{ color: "var(--color-dim)" }}
+      >
+        Alfred şu an{" "}
+        <strong style={{ color: "var(--color-muted)", fontWeight: 600 }}>
+          Mock modunda
+        </strong>{" "}
+        çalışıyor — gerçek sunucu bağlantısı yok.
       </p>
     </div>
   );
