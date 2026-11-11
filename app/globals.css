@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+/*
+ * =========================================================
+ *  ALFRED — Underground Command Center Theme
+ *  Cave headquarters aesthetic: near-black stone, gunmetal
+ *  panels, steel text, single amber accent. No external
+ *  images or brand logos — pure CSS.
+ * =========================================================
+ */
+
+/* ── Design tokens ─────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --color-cave:       #050607;   /* deepest stone — page bg */
+  --color-panel:      #14181c;   /* primary surface */
+  --color-panel-alt:  #1b2026;   /* secondary surface / bubbles */
+  --color-border:     #252c35;   /* subtle panel border */
+  --color-border-dim: #1c2229;   /* very subtle inner border */
+
+  /* Text */
+  --color-steel:      #c9d1d9;   /* primary body text */
+  --color-muted:      #7d8590;   /* secondary / timestamps */
+  --color-dim:        #4a5360;   /* tertiary / disabled */
+
+  /* Accent — warm amber / signal-yellow  */
+  --color-amber:      #f5b301;   /* primary accent */
+  --color-amber-dim:  #c28e00;   /* hover / pressed */
+  --color-amber-glow: rgba(245, 179, 1, 0.12);   /* soft glow halo */
+  --color-amber-fg:   #0d0f0b;   /* text on amber bg */
+
+  /* Optional monitor-glow detail (cyan at low opacity) */
+  --color-monitor:    rgba(56, 189, 248, 0.07);
+
+  /* Error / stop */
+  --color-danger:     #c0392b;
+  --color-danger-dim: #992d22;
+
+  /* Functional aliases (for body/foreground) */
+  --background: var(--color-cave);
+  --foreground: var(--color-steel);
+}
+
+/* ── Tailwind theme registration ───────────────────────── */
+@theme inline {
+  --color-background:   var(--background);
+  --color-foreground:   var(--foreground);
+
+  --color-cave:         var(--color-cave);
+  --color-panel:        var(--color-panel);
+  --color-panel-alt:    var(--color-panel-alt);
+  --color-border:       var(--color-border);
+  --color-border-dim:   var(--color-border-dim);
+
+  --color-steel:        var(--color-steel);
+  --color-muted:        var(--color-muted);
+  --color-dim:          var(--color-dim);
+
+  --color-amber:        var(--color-amber);
+  --color-amber-dim:    var(--color-amber-dim);
+  --color-amber-glow:   var(--color-amber-glow);
+  --color-amber-fg:     var(--color-amber-fg);
+
+  --color-monitor:      var(--color-monitor);
+  --color-danger:       var(--color-danger);
+  --color-danger-dim:   var(--color-danger-dim);
+
+  --font-sans:  var(--font-geist-sans);
+  --font-mono:  var(--font-geist-mono);
+}
+
+/* ── Force dark-only (no light override) ───────────────── */
+html {
+  color-scheme: dark;
+}
+
+/* ── Base reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-cave);
+  color: var(--color-steel);
+  font-family: var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Cave stone background: layered gradients + vignette ─ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 120% 100% at 50% 0%, transparent 55%, rgba(0, 0, 0, 0.7) 100%),
+    radial-gradient(ellipse 60% 40% at 50% 50%, rgba(14, 20, 28, 0.4) 0%, transparent 70%),
+    linear-gradient(170deg, #0a0d11 0%, #050607 40%, #080b0e 100%);
+}
+
+/* ── Scanline overlay on .cave-scanlines containers ───── */
+.cave-scanlines {
+  position: relative;
+}
+
+.cave-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.06) 3px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+}
+
+/* ── Status-dot pulse ───────────────────────────────────── */
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(245, 179, 1, 0.5);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 4px rgba(245, 179, 1, 0);
+  }
+}
+
+.status-dot-pulse {
+  animation: status-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-dot-pulse {
+    animation: none;
+  }
+}
+
+/* ── HUD label typography ──────────────────────────────── */
+.hud-label {
+  font-family: var(--font-geist-mono, ui-monospace, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
